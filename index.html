@@ -8,18 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/font/octicons.min.css" type="text/css">
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.0/css/bootstrap.min.css"/>
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.0.0-rc.8/dist/bootstrap-vue.min.css"/>
+    <link type="text/css" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="css/app.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.0.0-rc.8/dist/bootstrap-vue.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     <script src="js/vue-select.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/model/Mission.js"></script>
     <script src="js/app.min.js"></script>
 </head>
 <body>
     <div id="app" v-cloak>
-        <b-container fluid class="pt-3">
+        <b-container fluid class="pt-2">
             <b-row v-if="activeMissions.length == 0">
                 <b-col>
                     <b-card title="Welcome" class="mb-2">
@@ -27,7 +29,7 @@
                     </b-card>
                 </b-col>
             </b-row>
-            <b-row v-for="mission in activeMissions" :key="mission.value" class="mb-2">
+            <b-row v-for="mission in activeMissions" v-if="mission.completed != true" :key="mission.value" class="mb-2">
                 <b-col>
                     <div class="card">
                         <div class="card-header text-truncate pt-1 pb-1">
@@ -88,6 +90,10 @@
                 <v-select :options="defaults.program_types" v-model="selectedFilter" placeholder="Select a program type..." class="w-100 mb-3" @select="updateProgramFilter" :value.sync="selectedFilter"></v-select>
                 <v-select v-if="selectedFilter == 'Team Epic'" :options="defaults.teams" v-model="selectedTeam" placeholder="Select a team..." class="w-100 mb-3" @select="updateTeamFilter" :value.sync="selectedTeam"></v-select>
                 <v-select :options="filteredMissions" value="id" label="label" id="missionSelect" v-model="selectedMission" placeholder="Select a player mission..." class="w-100"></v-select>
+                <span class="switch switch-sm mt-3">
+                    <input type="checkbox" class="switch" id="switch-sm" v-model="includeCompleted">
+                    <label for="switch-sm">Include Completed</label>
+                </span>
             </b-form-row>
         </b-modal>
 
@@ -102,7 +108,7 @@
                         {{ requirement.goal }}
                     </div>
                     <div class="col-50 w-50">
-                        <b-input class="float-left w-100" type="text" v-model="requirement.current"></b-input>
+                        <b-input class="float-left w-100" type="number" v-model.number="requirement.current"></b-input>
                     </div>
                 </div>
             </b-form>

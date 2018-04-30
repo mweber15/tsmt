@@ -64,7 +64,8 @@ window.onload = function() {
             selectedMission: null,
             filteredMissions: [],
             selectedFilter: null,
-            selectedTeam: null
+            selectedTeam: null,
+            includeCompleted: false
         },
         created : function() {
             var _this = this;
@@ -176,7 +177,11 @@ window.onload = function() {
             removeActiveMission: function(arr, obj) {
                 for (var i=0; i < arr.length; i++) {
                     if (arr[i].id == obj.id) {
-                        arr.splice(i, 1);
+                        if (this.areAllRequirementsComplete(arr[i])) {
+                            arr[i].completed = true;
+                        } else {
+                            arr.splice(i, 1);
+                        }
                         break;
                     }
                 }

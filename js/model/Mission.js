@@ -24,6 +24,7 @@ function Mission(missionData) {
     _this.position = missionData.position || "-";
     _this.program_type = missionData.program_type || "";
     _this.program = missionData.program || "";
+    _this.completed = missionData.completed || false;
     _this.requirements = missionData.requirements.map(function(r) { return new Requirement(r); });
     _this.label = _this.createLabel();
 }
